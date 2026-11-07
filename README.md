@@ -20,6 +20,18 @@ make init
 
 セットアップ後、<http://localhost:8080> を開いてください。
 
+## 検証ページ
+
+- Webリクエスト: <http://localhost:8080/>
+- JSONエンドポイント: <http://localhost:8080/api/ping>
+- CSVエクスポート: <http://localhost:8080/csv>
+
+CSVでは `get()` / `cursor()` と、一括組み立て / 逐次出力の4通りを比較できます。初期状態では10万件の検証データを投入します。件数を変更する場合はLaravel側の `.env` に `BENCHMARK_RECORDS=500000` などを設定し、`make seed` を実行してください。
+
+### コードレビュー教材として使う場合
+
+一括版と逐次版は「出力方式だけが異なる同じ論理CSV」という前提ですが、レビューで仕様差分を見つけられるよう、`BufferedCsvExporter` と `StreamedCsvExporter` に実装を分けています。両クラスを比較し、CSVの列、形式、順序など利用者に見える差がないかレビューしてください。
+
 ## よく使うコマンド
 
 ```bash
@@ -28,6 +40,7 @@ make down      # コンテナを停止
 make logs      # ログを表示
 make shell     # PHP コンテナに入る
 make test      # Laravel のテストを実行
+make seed      # CSV検証用データを再生成
 make versions  # 各ソフトウェアのバージョンを確認
 ```
 
