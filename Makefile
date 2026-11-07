@@ -1,4 +1,4 @@
-.PHONY: init up down build logs shell test versions
+.PHONY: init up down build logs shell test seed versions
 
 init:
 	test -f src/.env || cp src/.env.example src/.env
@@ -6,6 +6,7 @@ init:
 	docker compose up -d
 	grep -q '^APP_KEY=base64:' src/.env || docker compose exec app php artisan key:generate
 	docker compose exec app php artisan migrate --force
+	docker compose exec app php artisan db:seed --force
 
 up:
 	docker compose up -d
@@ -24,6 +25,9 @@ shell:
 
 test:
 	docker compose exec app php artisan test
+
+seed:
+	docker compose exec app php artisan db:seed --force
 
 versions:
 	docker compose exec app php -v
